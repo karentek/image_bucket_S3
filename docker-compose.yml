@@ -1,9 +1,9 @@
 version: '3'
 
 services:
-  db:
+  db_s3:
     restart: always
-    container_name: db
+    container_name: db_s3
     image: postgres:13.1
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -17,10 +17,38 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - dbdata:/var/lib/postgresql/data/
+      - db_s3_data:/var/lib/postgresql/data/
 
-  django_backend:
-    container_name: django-backend
+  redis:
+    image: redis:7.0.5-alpine
+    hostname: worker
+  worker:
+    build:
+      context: .
+    hostname: worker
+    entrypoint: celery
+    command: -A celery_app worker --loglevel=info
+    volumes:
+      - ./app:/app
+    links:
+      - redis
+    depends_on:
+      - redis
+      - db_s3
+    environment:
+#      - DB_HOST=database
+#      - DB_NAME=dbname
+#      - DB_USER=dbuser
+#      - DB_PASS=pass
+      POSTGRES_NAME: ${POSTGRES_NAME}
+      POSTGRES_LOCAL_PORT: ${POSTGRES_LOCAL_PORT}
+      POSTGRES_PORT: ${POSTGRES_LOCAL_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: db_s3
+
+  s3_backend:
+    container_name: s3_backend
     build:
      context: .
      dockerfile: Dockerfile
@@ -32,7 +60,7 @@ services:
      POSTGRES_PORT: ${POSTGRES_LOCAL_PORT}
      POSTGRES_USER: ${POSTGRES_USER}
      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-     POSTGRES_HOST: db
+     POSTGRES_HOST: db_s3
 
     expose:
      - "${DJANGO_PORT}"
@@ -41,7 +69,7 @@ services:
      - static_volume:/app/public/static
      - media_volume:/app/public/media
     depends_on:
-     - db
+     - db_s3
     restart: on-failure
 
   nginx:
@@ -53,9 +81,9 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - django_backend
+      - s3_backend
 
 volumes:
-  dbdata:
+  db_s3_data:
   static_volume:
   media_volume:

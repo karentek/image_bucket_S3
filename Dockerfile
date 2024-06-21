@@ -59,5 +59,5 @@ ENV SERVICE_HOST="0.0.0.0"
 ENV SERVICE_PORT=8000
 
 # Run service
-CMD python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --workers=1 --bind $SERVICE_HOST:$SERVICE_PORT hardqode.wsgi
+CMD python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --workers=1 --bind $SERVICE_HOST:$SERVICE_PORT image_proc_api.wsgi
 EXPOSE 8000

@@ -31,6 +31,7 @@ def deploy_image(context, image_name: str, image_version: str):
     cmd = f"docker push {DOCKER_IMAGE_REGISTRY}/{image_name}:{image_version}"
     context.run(cmd)
 
+
 def get_docker_build_command():
     processor = platform.processor()
     if "arm" in processor:
