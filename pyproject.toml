@@ -1,0 +1,111 @@
+[tool.poetry]
+name = "hardqode"
+version = "0.9.0"
+description = ""
+authors = ["Sitisom <offablaizov@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.4"
+djangorestframework = "^3.14.0"
+ruff = "^0.0.285"
+django-environ = "^0.10.0"
+django-filter = "^23.2"
+drf-spectacular = "^0.26.4"
+drf-spectacular-sidecar = "^2023.8.1"
+pillow = "^10.0.0"
+django-allauth = "^0.55.0"
+djangorestframework-simplejwt = "^5.3.0"
+gunicorn = "^21.2.0"
+pytest = "^7.4.2"
+factory-boy = "^3.3.0"
+django-rest-passwordreset = "^1.3.0"
+drf-standardized-errors = {extras = ["openapi"], version = "^0.12.5"}
+django-cors-headers = "^4.3.0"
+psycopg2-binary = "^2.9.9"
+django-grappelli = "^4.0.1"
+
+[tool.poetry.group.dev.dependencies]
+tomli = "^2.0.1"
+invoke = "^2.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+skip_string_normalization = true
+target-version = ["py311"]
+
+[tool.ruff]
+ignore = [
+    "E501",
+    "SIM105",
+    "SIM108",
+    "RUF001",
+    "RUF002",
+    "RUF012",
+    "TD003",
+    "TD004",
+    "INP001",
+    "PT009",
+    "PT027",
+]
+select = [
+    "B",
+    "C4",
+    "COM",
+    "DJ",
+    "DTZ003",
+    "E",
+    "EM",
+    "F",
+    "FBT",
+    "FLY",
+    "G",
+    "I",
+    "ICN",
+    "INP",
+    "INT",
+    "N",
+    "PERF",
+    "PGH",
+    "PIE",
+    "PLC",
+    "PLC1901",
+    "PLE",
+    "PT",
+    "Q",
+    "RET",
+    "RSE",
+    "RUF",
+    "S308",
+    "S608",
+    "SIM",
+    "SLOT",
+    "T10",
+    "TID",
+    "TD",
+    "UP",
+    "W",
+    "YTT",
+]
+target-version = "py311"
+
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "single"
+multiline-quotes = "double"
+
+[tool.ruff.flake8-tidy-imports]
+ban-relative-imports = "all"
+banned-api = {"umschool.settings" = {msg = "Use django.conf"}}
+
+[tool.ruff.isort]
+required-imports = ["from __future__ import annotations"]
+
+[tool.ruff.per-file-ignores]
+"**/migrations/*.py" = ["I002", "N806", "PIE804"]
+"**/tests/*.py" = ["S101"]
+"apps.py" = ["F401"]

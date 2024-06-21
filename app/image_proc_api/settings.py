@@ -35,11 +35,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders',
-    'storages',
+    'channels',
+    'django_celery_results',
+    'django_celery_beat',
+    'corsheaders', #S3
+    'storages', #S3
     'users',
     'projects',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -113,6 +117,7 @@ AWS_S3_ENDPOINT_URL = env('STORAGE_ENDPOINT')
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
+
 # Настройки django-storages для использования Yandex Object Storage
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.storage.yandexcloud.net'
 AWS_S3_FILE_OVERWRITE = False
@@ -176,6 +181,25 @@ STATIC_URL = env.str('STATIC_URL', default='/static/')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CACHES = {'default': env.cache('REDIS_CACHE_URL', default='redis://localhost:6379')}
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('localhost', 6379)],
+        },
+    },
+}
+
 
 LOGGING = {
     'version': 1,
