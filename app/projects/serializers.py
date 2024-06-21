@@ -43,18 +43,6 @@ class ImageCreateSerializer(serializers.ModelSerializer):
         image = validated_data.pop('file')
         instance = super().create(validated_data)
         instance.original = image
-        # if instance.thumb:
-        #     instance.thumb.delete()
-        # instance.thumb = image
-        # if instance.big_thumb:
-        #     instance.big_thumb.delete()
-        # instance.big_thumb = image
-        # if instance.big_1920:
-        #     instance.big_1920.delete()
-        # instance.big_1920 = image
-        # if instance.d2500:
-        #     instance.d2500.delete()
-        # instance.d2500 = image
         instance.save()
         return instance
 

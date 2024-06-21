@@ -1,11 +1,5 @@
-from PIL import Image as PILImage
 from io import BytesIO
 from django.core.files.base import ContentFile
-
-from PIL import Image as PILImage
-from io import BytesIO
-from django.core.files.base import ContentFile
-
 from PIL import Image as PILImage
 
 
