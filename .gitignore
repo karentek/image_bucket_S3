@@ -1,0 +1,25 @@
+app/.env
+.env
+.ruff_cache
+logs/
+schema.yml
+public
+.idea/misc.xml
+.idea/pho_load.iml
+
+### macOS ###
+.DS_Store
+.AppleDouble
+.LSOverride
+### PyCharm ###
+app/idea
+*idea
+### Postgres ###
+dbdata/
+*.idea
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+*$py.class
+
+### Cache Python ###
+*__pycache__*
